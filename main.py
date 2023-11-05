@@ -30,6 +30,7 @@ class StrEnum(Enum):
 # Replace with StrEnum after upgrading to > python 3.11
 class DistributionStatus(StrEnum):
     ACTIVE = "active"
+    ROLLING = "rolling"
     EOL = "end-of-life"
 
 
@@ -65,6 +66,13 @@ def main():
         if v["distribution_type"] == distribution_type
         if v["distribution_status"] == distribution_status
     ]
+
+    # Add rolling if required
+    if (
+        distribution_type == DistributionType.ROS2.value
+        and distribution_status == DistributionStatus.ACTIVE.value
+    ):
+        selected_distros.append("rolling")
 
     write_distros_to_file(selected_distros)
 
